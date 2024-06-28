@@ -183,7 +183,7 @@ function App () {
                 <h1 className='text-3xl'>METADATA</h1>
                 <div className='flex flex-col'>
                   <SyntaxHighlighter language='json' style={dracula} wrapLongLines={true}>
-                    {JSON.stringify(metadata, null, 2)}
+                    {JSON.stringify(metadata, null, 2).slice(1, -1)}
                   </SyntaxHighlighter>
                 </div>
                 <button className='px-4 py-2' onClick={() => handleCopyButton(JSON.stringify(metadata, null, 2).slice(1, -1))}>Copy</button>
