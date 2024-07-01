@@ -27,8 +27,8 @@ function App () {
 
   const [columnType, setColumnType] = useState('')
   const [generating, setGenerating] = useState(false)
-  const [metadata, setMetadata] = useState({})
-  const [mapping, setMapping] = useState({})
+  const [metadata, setMetadata] = useState('')
+  const [mapping, setMapping] = useState('')
 
   const handleNewRowOnChange = (event) => {
     setNewRowName(event.target.value)
@@ -111,8 +111,8 @@ function App () {
         })
       })
     }
-    setMetadata(newMetadata)
-    setMapping(newMapping)
+    setMetadata(JSON.stringify(newMetadata, null, 2).slice(1, -1).trim())
+    setMapping(JSON.stringify(newMapping, null, 2).slice(1, -1).trim())
   }
 
   const handleCopyButton = (text) => {
@@ -183,19 +183,19 @@ function App () {
                 <h1 className='text-3xl'>METADATA</h1>
                 <div className='flex flex-col'>
                   <SyntaxHighlighter language='json' style={dracula} wrapLongLines={true}>
-                    {JSON.stringify(metadata, null, 2).slice(1, -1)}
+                    {metadata}
                   </SyntaxHighlighter>
                 </div>
-                <button className='px-4 py-2' onClick={() => handleCopyButton(JSON.stringify(metadata, null, 2).slice(1, -1))}>Copy</button>
+                <button className='px-4 py-2' onClick={() => handleCopyButton(metadata)}>Copy</button>
               </div>
               <div className='flex flex-col gap-4 items-center'>
-                <h1 className='text-3xl'>METADATA</h1>
+                <h1 className='text-3xl'>MAPPING</h1>
                 <div className='flex flex-col'>
                   <SyntaxHighlighter language='json' style={dracula} wrapLongLines={true}>
-                    {JSON.stringify(mapping, null, 2)}
+                    {mapping}
                   </SyntaxHighlighter>
                 </div>
-                <button className='px-4 py-2' onClick={() => handleCopyButton(JSON.stringify(mapping, null, 2))}>Copy</button>
+                <button className='px-4 py-2' onClick={() => handleCopyButton(mapping)}>Copy</button>
               </div>
             </div>
       }
