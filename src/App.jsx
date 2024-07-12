@@ -93,7 +93,7 @@ function App () {
                   'change_pdf_name.pdf'
                 ],
                 type: 'number',
-                field_name: `line${rowIndex + 1}_column${columnIndex + 1}`
+                field_name: `line${rowIndex + 1}_col${columnIndex + 1}`
               }
             }
           } else if (column.type !== 'Rate') {
