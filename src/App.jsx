@@ -1,9 +1,10 @@
-import { useState } from 'react'
 import SyntaxHighlighter from 'react-syntax-highlighter/dist/esm/default-highlight'
 import { dracula } from 'react-syntax-highlighter/dist/esm/styles/hljs'
 import { Toaster, toast } from 'sonner'
 import './App.css'
-import { AddIcon } from './constants/icons'
+import { Columns } from './components/Columns'
+import { Rows } from './components/Rows'
+import { useConfig } from './hooks/useConfig'
 import { createAdd } from './services/createAdd'
 import { createArgument } from './services/createArgument'
 import { createConstant } from './services/createConstant'
@@ -12,53 +13,19 @@ import { createSwitch } from './services/createSwitch'
 import { useTaxTableStore } from './stores/taxTableStore'
 
 function App () {
-  const [isRateConstant, setIsRateConstant] = useState(true)
-
   const rows = useTaxTableStore(state => state.rows)
-  const setRows = useTaxTableStore(state => state.setRows)
-  const [newRowName, setNewRowName] = useState('')
-
   const columns = useTaxTableStore(state => state.columns)
-  const setColumns = useTaxTableStore(state => state.setColumns)
-  const [newColumnName, setNewColumnName] = useState('')
 
-  const columnTypes = useTaxTableStore(state => state.columnTypes)
-  const setColumnTypes = useTaxTableStore(state => state.setColumnTypes)
+  const { generating, metadata, mapping, isRateConstant, setIsRateConstant, setGenerating, setMetadata, setMapping } = useConfig()
 
-  const [columnType, setColumnType] = useState('')
-  const [generating, setGenerating] = useState(false)
-  const [metadata, setMetadata] = useState('')
-  const [mapping, setMapping] = useState('')
-
-  const handleNewRowOnChange = (event) => {
-    setNewRowName(event.target.value)
-  }
-
-  const handleAddRow = (event) => {
-    event.preventDefault()
-    setRows({ name: newRowName })
-    setNewRowName('')
-  }
-
-  const handleNewColumnTextOnChange = (event) => {
-    setNewColumnName(event.target.value)
-  }
-
-  const handleNewColumnTypeOnChange = (event) => {
-    setColumnType(event.target.value)
-  }
-
-  const handleAddColumn = (event) => {
-    event.preventDefault()
-    if (columnType !== '') {
-      setColumns({
-        name: newColumnName,
-        type: columnType
+  const handleCopyButton = (text) => {
+    navigator.clipboard.writeText(text)
+      .then(() => {
+        toast.success('Copied to clipboard')
       })
-      setNewColumnName('')
-      setColumnTypes(columnType)
-      setColumnType('')
-    }
+      .catch(e => {
+        toast.error('Ups. Something wen\'t wrong')
+      })
   }
 
   const handleGenerateOnClik = () => {
@@ -115,16 +82,6 @@ function App () {
     setMapping(JSON.stringify(newMapping, null, 2).slice(1, -1).trim())
   }
 
-  const handleCopyButton = (text) => {
-    navigator.clipboard.writeText(text)
-      .then(() => {
-        toast.success('Copied to clipboard')
-      })
-      .catch(e => {
-        toast.error('Ups. Something wen\'t wrong')
-      })
-  }
-
   return (
     <main className='flex flex-col items-center min-h-screen min-w-full'>
       <Toaster />
@@ -132,20 +89,7 @@ function App () {
       {
         !generating
           ? <div className='flex items-start gap-8'>
-              <div className='flex gap-5'>
-                <h2>Rows:</h2>
-                <div>
-                  {rows.map((row, index) => (
-                    <p key={index}>{index + 1}. {row.name}</p>
-                  ))}
-                  <form className='flex gap-2 mt-4' onSubmit={handleAddRow}>
-                    <input className='px-4 py-2' type='text' value={newRowName} onChange={handleNewRowOnChange}/>
-                    <button type='submit'>
-                      <AddIcon />
-                    </button>
-                  </form>
-                </div>
-              </div>
+              <Rows />
               <div className='flex flex-col gap-6'>
                 <div className='flex items-center gap-4'>
                   <h2>Is rate constant?</h2>
@@ -153,30 +97,7 @@ function App () {
                 </div>
                 <button className='p-4' onClick={handleGenerateOnClik}>GENERATE</button>
               </div>
-              <div className='flex gap-5'>
-                <h2>Columns:</h2>
-                <div>
-                  {columns.map((column, index) => (
-                    <p key={index}>{index + 1}. {column.name}</p>
-                  ))}
-                  <form className='flex gap-2 mt-4' onSubmit={handleAddColumn}>
-                    <div className='flex flex-col gap-1 max-h-screen'>
-                      <input className='px-4 py-2' type='text' value={newColumnName} onChange={handleNewColumnTextOnChange}/>
-                      <select className='px-4 py-2' value={columnType} onChange={handleNewColumnTypeOnChange}>
-                        <option value=''>Select one option</option>
-                        {columnTypes.map((type, index) => (
-                          <option key={index} value={type}>
-                            {type}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-                    <button type='submit'>
-                      <AddIcon />
-                    </button>
-                  </form>
-                </div>
-              </div>
+              <Columns />
             </div>
           : <div className='flex items-stretch grow gap-8 px-10 py-5'>
               <div className='flex flex-col gap-4 items-center'>
