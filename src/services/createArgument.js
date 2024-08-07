@@ -1,4 +1,4 @@
-export const createArgument = (row, column) => {
+export const createArgument = (row, column, order) => {
   const label = `${row.name} - ${column.name}`
   const cell = {
     argument: {
@@ -8,7 +8,7 @@ export const createArgument = (row, column) => {
     },
     label,
     display: {
-      order: 1,
+      order,
       visible: true,
       readOnly: false,
       carryover: false

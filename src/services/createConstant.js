@@ -1,10 +1,10 @@
-export const createConstant = (row, column) => {
+export const createConstant = (row, column, order) => {
   const label = `${row.name} - ${column.name}`
   const cell = {
     constant: 0,
     label,
     display: {
-      order: 1,
+      order,
       visible: true,
       readOnly: true,
       carryover: false

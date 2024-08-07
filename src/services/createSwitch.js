@@ -1,11 +1,8 @@
-export const createSwitch = (row, column, columns) => {
+export const createSwitch = (row, column, columns, order) => {
   const label = `${row.name} - ${column.name}`
   const taxColumn = columns.find(column => column.type === 'Tax')
   const rateColumn = columns.find(column => column.type === 'Rate')
 
-  console.log(label)
-  console.log(taxColumn.entries)
-  console.log(rateColumn.entries)
   const cell = {
     formula: {
       switch: {
@@ -30,7 +27,7 @@ export const createSwitch = (row, column, columns) => {
     label,
     subschedule: '',
     display: {
-      order: 1,
+      order,
       visible: true,
       readOnly: true,
       carryover: false

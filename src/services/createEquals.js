@@ -1,4 +1,4 @@
-export const createEquals = (row, column, columns) => {
+export const createEquals = (row, column, columns, order) => {
   const label = `${row.name} - ${column.name}`
   const taxableColumn = columns.find(column => column.type === 'Taxable')
   const cell = {
@@ -6,7 +6,7 @@ export const createEquals = (row, column, columns) => {
     label,
     subschedule: '',
     display: {
-      order: 1,
+      order,
       visible: true,
       readOnly: true,
       carryover: false

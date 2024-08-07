@@ -21,6 +21,15 @@ export const useTaxTableStore = create((set, get) => {
         columns: [...state.columns, newColumn]
       }))
     },
+    editColumn: (index, newName, newType) => {
+      set(state => {
+        // console.log(index + newName + newType)
+        const newColums = [...state.columns]
+        newColums[index] = { name: newName, type: newType }
+
+        return { columns: newColums }
+      })
+    },
     columnTypes: [
       'Gross',
       'Deduction',
