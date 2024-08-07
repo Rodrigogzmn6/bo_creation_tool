@@ -29,6 +29,7 @@ module.exports = {
   ],
   rules: {
     'react/react-in-jsx-scope': 'off',
-    'no-case-declarations': 'off'
+    'no-case-declarations': 'off',
+    'react/prop-types': 'off'
   }
 }

@@ -1,8 +1,10 @@
+import { useState } from 'react'
 import SyntaxHighlighter from 'react-syntax-highlighter/dist/esm/default-highlight'
 import { dracula } from 'react-syntax-highlighter/dist/esm/styles/hljs'
 import { Toaster, toast } from 'sonner'
 import './App.css'
 import { Columns } from './components/Columns'
+import { RowModal } from './components/RowModal'
 import { Rows } from './components/Rows'
 import { useConfig } from './hooks/useConfig'
 import { createAdd } from './services/createAdd'
@@ -13,6 +15,10 @@ import { createSwitch } from './services/createSwitch'
 import { useTaxTableStore } from './stores/taxTableStore'
 
 function App () {
+  const [editingRow, setEditingRow] = useState(false)
+  // const [editingColumn, setEditingColumn] = useState(false)
+  const [indexToEdit, setIndexToEdit] = useState()
+
   const rows = useTaxTableStore(state => state.rows)
   const columns = useTaxTableStore(state => state.columns)
 
@@ -82,14 +88,20 @@ function App () {
     setMapping(JSON.stringify(newMapping, null, 2).slice(1, -1).trim())
   }
 
+  const handleRowEditing = (index) => {
+    setEditingRow(true)
+    setIndexToEdit(index)
+  }
+
   return (
     <main className='flex flex-col items-center min-h-screen min-w-full'>
       <Toaster />
+      {editingRow && <RowModal closeEditing={setEditingRow} index={indexToEdit}/>}
       <h1 className='text-3xl font-bold py-4'>B&O Creation Tool</h1>
       {
         !generating
           ? <div className='flex items-start gap-8'>
-              <Rows />
+              <Rows handleEditing={handleRowEditing}/>
               <div className='flex flex-col gap-6'>
                 <div className='flex items-center gap-4'>
                   <h2>Is rate constant?</h2>

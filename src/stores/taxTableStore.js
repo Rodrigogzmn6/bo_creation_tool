@@ -8,6 +8,13 @@ export const useTaxTableStore = create((set, get) => {
         rows: [...state.rows, newRow]
       }))
     },
+    editRow: (index, newName) => {
+      set(state => {
+        const newRows = [...state.rows]
+        newRows[index] = { name: newName }
+        return { rows: newRows }
+      })
+    },
     columns: [],
     setColumns: (newColumn) => {
       set(state => ({
